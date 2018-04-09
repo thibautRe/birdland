@@ -1,0 +1,5 @@
+node_modules
+Thumbs.db
+
+.cache
+dist/
