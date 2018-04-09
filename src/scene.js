@@ -5,7 +5,7 @@ import Bird from './bird'
 export default class Scene extends Phaser.Scene {
   constructor() {
     super({
-      key: 'MainScene'
+      key: 'MainScene',
     })
   }
 
@@ -20,7 +20,7 @@ export default class Scene extends Phaser.Scene {
       y: 100,
     })
 
-    this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys()
   }
 
   update() {

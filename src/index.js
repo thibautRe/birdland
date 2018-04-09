@@ -10,13 +10,14 @@ if (module.hot) {
 }
 
 const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-      default: 'arcade',
-    },
-    scene: GameScene,
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  physics: {
+    default: 'arcade',
+  },
+  scene: GameScene,
 }
 
-const game = new Phaser.Game(config);
+// Kickstart the game
+new Phaser.Game(config)

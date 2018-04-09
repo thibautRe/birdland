@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel index.html"
+    "dev": "parcel index.html",
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,12 @@
     "http-server": "^0.11.1",
     "parcel-bundler": "^1.7.0",
     "phaser": "^3.3.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "^1.11.1"
   }
 }

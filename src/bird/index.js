@@ -1,16 +1,25 @@
 import Phaser from 'phaser'
 
 export default class Bird extends Phaser.GameObjects.Sprite {
-  static get key() { return 'bird' }
-  static get sprite() { return require('./bird.png') }
-  static get spriteDimensions() { return { frameWidth: 32, frameHeight: 22 }}
+  static get key() {
+    return 'bird'
+  }
+  static get sprite() {
+    return require('./bird.png')
+  }
+  static get spriteDimensions() {
+    return { frameWidth: 32, frameHeight: 22 }
+  }
 
   static preload(scene) {
     scene.load.spritesheet(Bird.key, Bird.sprite, Bird.spriteDimensions)
-    scene.load.image('particle', 'http://labs.phaser.io/assets/particles/blue.png');
+    scene.load.image(
+      'particle',
+      'http://labs.phaser.io/assets/particles/blue.png',
+    )
   }
 
-  constructor({ scene, x, y  }) {
+  constructor({ scene, x, y }) {
     super(scene, x, y, Bird.key, 0)
 
     const particles = this.scene.add.particles('particle')
@@ -22,14 +31,17 @@ export default class Bird extends Phaser.GameObjects.Sprite {
 
     this.type = 'bird'
 
-    this.scene.physics.world.enable(this);
-    this.scene.add.existing(this);
+    this.scene.physics.world.enable(this)
+    this.scene.add.existing(this)
 
-    emitter.startFollow(this);
+    emitter.startFollow(this)
 
     this.scene.anims.create({
       key: 'down',
-      frames: this.scene.anims.generateFrameNumbers(Bird.key, { start: 0, end: 2 }),
+      frames: this.scene.anims.generateFrameNumbers(Bird.key, {
+        start: 0,
+        end: 2,
+      }),
       frameRate: 10,
       repeat: -1,
     })
