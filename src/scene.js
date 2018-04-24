@@ -21,7 +21,7 @@ export default class Scene extends Phaser.Scene {
 
   create() {
     // Create floor tiles
-    new Grid({ scene: this, height: 20, width: 30 })
+    new Grid({ scene: this, height: 100, width: 100 })
 
     // Create plants
     const plants = [{ x: 100, y: 200 }, { x: 164, y: 200 }]
