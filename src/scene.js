@@ -3,7 +3,6 @@ import Phaser from 'phaser'
 import Bird from './bird'
 import Plant from './scenery/plants'
 import Seeds from './collectables/seeds'
-import FloorTile from './scenery/floortile'
 import Grid from './scenery/grid'
 
 export default class Scene extends Phaser.Scene {
