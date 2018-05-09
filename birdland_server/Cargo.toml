@@ -1,0 +1,8 @@
+[package]
+name = "birdland_server"
+version = "0.1.0"
+authors = ["sopal <sopal@sopalkta.com>"]
+
+[dependencies]
+noise = "0.5.1"
+grid_2d = "0.8.0"
