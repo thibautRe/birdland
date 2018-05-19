@@ -6,3 +6,4 @@ authors = ["Thibaut REMY <thibaut@thibaut.re>"]
 [dependencies]
 noise = "0.5.1"
 grid_2d = "0.8.0"
+nickel= "0.10"
