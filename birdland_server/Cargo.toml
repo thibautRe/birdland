@@ -7,3 +7,4 @@ authors = ["Thibaut REMY <thibaut@thibaut.re>"]
 noise = "0.5.1"
 grid_2d = "0.8.0"
 nickel= "0.10"
+serde_json = "1.0"

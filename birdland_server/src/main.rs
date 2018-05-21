@@ -3,6 +3,7 @@ extern crate nickel;
 
 extern crate grid_2d;
 extern crate noise;
+extern crate serde_json;
 
 mod chunk;
 
@@ -22,29 +23,7 @@ fn main() {
             let chunk = Chunk::new(6, Coord::new(x, y));
             let grid = chunk.get_grid();
             let mut response = String::new();
-            for coord in grid.coords() {
-                let mut value = grid.get(coord).unwrap();
-                let value = value.round() as i32;
-                if coord.x == 0 {
-                    response.push_str("<br />");
-                }
-
-                let character = match value {
-                    0 => ' ',
-                    1 => '-',
-                    2 => '=',
-                    3 => '+',
-                    4 => 'x',
-                    5 => 'a',
-                    6 => '%',
-                    7 => '$',
-                    8 => 'M',
-                    9 => '@',
-                    _ => ' ',
-                };
-
-                response.push(character);
-            }
+            response.push_str(&serde_json::to_string(&grid).unwrap());
             response
         },
     );
