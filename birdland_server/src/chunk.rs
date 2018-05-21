@@ -5,7 +5,27 @@ use self::grid_2d::{Coord, Grid, Size};
 use self::noise::{NoiseFn, Perlin, Seedable};
 
 /// Size of a chunk
-const _CHUNK_SIZE: usize = 64;
+const _CHUNK_SIZE: u32 = 64;
+
+/// Provides a cubic easing between 0 and 1
+///
+/// Returns 0 if the input value is below 0, and 1 if
+/// the value is above 1. It will return 0.5 if the value
+/// equals 0.5, and a smooth interpolation if the value
+/// is between 0 and 1.
+///
+/// Example: https://easings.net/#easeInOutCubic
+fn easing_cub_in_out(t: f64) -> f64 {
+    if t < 0.0 {
+        return 0.0;
+    } else if t < 0.5 {
+        return 4.0 * t * t * t;
+    } else if t < 1.0 {
+        return (t - 1.0) * (2.0 * t - 2.0) * (2.0 * t - 2.0) + 1.0;
+    } else {
+        1.0
+    }
+}
 
 /// A Chunk holds informations about a size and position,
 /// as well as informations for randomization
@@ -14,6 +34,7 @@ pub struct Chunk {
     pub position: Coord,
     noises: Vec<Noise>,
     seed: u32,
+    precision: u32,
 }
 
 impl Chunk {
@@ -30,13 +51,19 @@ impl Chunk {
             size: _CHUNK_SIZE as u32,
             noises,
             seed,
+            precision: 2,
         }
     }
 
     /// Returns a Grid with noised values
     pub fn get_grid(&self) -> Grid<f64> {
-        let mut grid = Grid::new_default(Size::new(_CHUNK_SIZE as u32, _CHUNK_SIZE as u32));
+        let mut grid = Grid::new_default(Size::new(_CHUNK_SIZE, _CHUNK_SIZE));
         let is_island_chunk = self.is_island_chunk();
+        // let is_island_chunk = true;
+
+        // The factor of the island determines roughly how big the island will be.
+        let factor = self.noises[0].get(self.position) * 1.5 + 0.5;
+        println!("{}", factor);
         for coord in grid.coords() {
             let mut value = 0.0;
             // Calculate the resulting noise from the perlins
@@ -49,12 +76,16 @@ impl Chunk {
 
             // If the chunk is an island then higher it!
             if is_island_chunk {
-                value *= 1.0 + (self.get_island_factor(coord) * 10.0);
+                value *= 1.0 + (self.get_island_factor(coord, factor) * 10.0);
             }
+
+            // Round the value to the appropriate precision
+            value = (value * 10u32.pow(self.precision) as f64).round()
+                / 10u32.pow(self.precision) as f64;
 
             // Assign the noise value to the coord
             if let Some(x) = grid.get_mut(coord) {
-                *x = value;
+                *x = value
             }
         }
 
@@ -65,28 +96,16 @@ impl Chunk {
     fn is_island_chunk(&self) -> bool {
         let noise = Noise::new(self.seed, 30.0, 1.0);
 
-        println!("Island : {}", noise.get(self.position).abs() < 0.5);
         noise.get(self.position).abs() < 0.5
     }
 
     /// Returns a value between 0 and 1 (0 at the edges of the chunk,
     /// in order to get a smooth transition between chunks)
-    fn get_island_factor(&self, point: Coord) -> f64 {
-        // lower it closer to 1 for more rough edges
-        // increase it to make it narrower
-        let factor: f64 = 100.0;
-
-        // Formulae : e^(-1/x + 1/(x-CHUNK))
-        // TODO: Probably replace that by something else, gives too squarish results
-        let factor_x =
-            factor.powf(-1.0 / point.x as f64 + 1.0 / (point.x as f64 - _CHUNK_SIZE as f64));
-        let factor_y =
-            factor.powf(-1.0 / point.y as f64 + 1.0 / (point.y as f64 - _CHUNK_SIZE as f64));
-
-        // The edge factor is 0 at the edges and around 1 in the center
-        let edge_factor = factor_x * factor_y * 1.4;
-
-        edge_factor
+    fn get_island_factor(&self, point: Coord, factor: f64) -> f64 {
+        let center = (_CHUNK_SIZE / 2) as f64;
+        let distance_from_center = factor * (-(point.x as f64 / center - 1.0).abs() + 1.0)
+            * (-(point.y as f64 / center - 1.0).abs() + 1.0);
+        easing_cub_in_out(distance_from_center as f64)
     }
 }
 
