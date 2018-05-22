@@ -1,11 +1,15 @@
 #[macro_use]
 extern crate nickel;
+#[macro_use]
+extern crate serde_derive;
 
 extern crate grid_2d;
 extern crate noise;
+extern crate serde;
 extern crate serde_json;
 
 mod chunk;
+mod tile;
 
 use chunk::Chunk;
 use grid_2d::Coord;

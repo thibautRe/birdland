@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[System.Serializable]
+class Tile
+{
+    public float alt = 3;
+
+}
+
+[System.Serializable]
 class Chunk
 {
     public static int SIZE = 64;
-    public float[] cells = new float[64 * 64];
+    public Tile[] cells = new Tile[64 * 64];
 
     public static Chunk FromJSON(string json)
     {
@@ -37,8 +45,6 @@ public class GenerateTerrain : MonoBehaviour
         StartCoroutine(GetChunk());
     }
 
-
-
     void UpdateMesh()
     {
         mesh.Clear();
@@ -58,7 +64,7 @@ public class GenerateTerrain : MonoBehaviour
         {
             int z = i % Chunk.SIZE;
             int x = i / Chunk.SIZE;
-            float y = chunk.cells[i];
+            float y = chunk.cells[i].alt;
             vertices.Add(new Vector3(x, y, z));
 
             if (y < 2)

@@ -4,6 +4,8 @@ extern crate noise;
 use self::grid_2d::{Coord, Grid, Size};
 use self::noise::{NoiseFn, Perlin, Seedable};
 
+use super::tile::Tile;
+
 /// Size of a chunk
 const _CHUNK_SIZE: u32 = 64;
 
@@ -56,7 +58,7 @@ impl Chunk {
     }
 
     /// Returns a Grid with noised values
-    pub fn get_grid(&self) -> Grid<f64> {
+    pub fn get_grid(&self) -> Grid<Tile> {
         let mut grid = Grid::new_default(Size::new(_CHUNK_SIZE, _CHUNK_SIZE));
         let is_island_chunk = self.is_island_chunk();
         // let is_island_chunk = true;
@@ -65,27 +67,27 @@ impl Chunk {
         let factor = self.noises[0].get(self.position) * 1.5 + 0.5;
         println!("{}", factor);
         for coord in grid.coords() {
-            let mut value = 0.0;
+            let mut altitude = 0.0;
             // Calculate the resulting noise from the perlins
             // The real coord needs to be shifted by the origin
             // of the grid
             let moved_coord = coord + (self.position * _CHUNK_SIZE as i32);
             for noise in self.noises.iter() {
-                value += noise.get(moved_coord) * noise.amplitude;
+                altitude += noise.get(moved_coord) * noise.amplitude;
             }
 
             // If the chunk is an island then higher it!
             if is_island_chunk {
-                value *= 1.0 + (self.get_island_factor(coord, factor) * 10.0);
+                altitude *= 1.0 + (self.get_island_factor(coord, factor) * 10.0);
             }
 
-            // Round the value to the appropriate precision
-            value = (value * 10u32.pow(self.precision) as f64).round()
+            // Round the altitude to the appropriate precision
+            altitude = (altitude * 10u32.pow(self.precision) as f64).round()
                 / 10u32.pow(self.precision) as f64;
 
-            // Assign the noise value to the coord
+            // Assign the noise altitude to the coord
             if let Some(x) = grid.get_mut(coord) {
-                *x = value
+                *x = Tile::new(altitude);
             }
         }
 
@@ -137,11 +139,4 @@ impl Noise {
         // Normalize the value between 0 and 1 (the noise generator yields -1 and 1)
         (noise + 1.0) / 2.0
     }
-}
-
-#[test]
-fn test_grid() {
-    let chunk = Chunk::new(1, vec![10, 10]);
-    let grid = chunk.get_grid();
-    println!("{:?}", grid)
 }
