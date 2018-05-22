@@ -65,7 +65,6 @@ impl Chunk {
 
         // The factor of the island determines roughly how big the island will be.
         let factor = self.noises[0].get(self.position) * 1.5 + 0.5;
-        println!("{}", factor);
         for coord in grid.coords() {
             let mut altitude = 0.0;
             // Calculate the resulting noise from the perlins
