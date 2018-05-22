@@ -1,21 +1,7 @@
 # A Bird's Land
 
-Prototype of game using PhaserJS
+Prototype of game using Rust and Unity3D
 
-## Installation
+## Run the server
 
-``` bash
-npm i
-npm run dev
-```
-
-The development server is available on port `1234`
-
-## Troubleshooting
-
-<details>
-  <summary>First parcel compilation hangs up</summary>
-  <p>
-    The first `npm run dev` can result in a hang up when Parcel tries to compile PhaserJS's code. Re-running `npm run dev` has proven useful in some cases (in my case I ran it 5 times until it was finally done compiling all of Phaser's files).
-  </p>
-</details>
+The run server is ran with a `stable` version of Rust (1.26 minimum) and can be run by running `cargo run` in the `birdland_server` directory.
