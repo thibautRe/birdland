@@ -4,7 +4,7 @@ extern crate noise;
 use self::grid_2d::{Coord, Grid, Size};
 use self::noise::{NoiseFn, Perlin, Seedable};
 
-use super::tile::Tile;
+use super::tile::{Tile, TileObjects};
 
 /// Size of a chunk
 const _CHUNK_SIZE: u32 = 64;
@@ -85,9 +85,15 @@ impl Chunk {
             altitude = (altitude * 10u32.pow(self.precision) as f64).round()
                 / 10u32.pow(self.precision) as f64;
 
+            let mut tile_object = None;
+            // Create vegetation
+            if coord.x == 0 && coord.y == 0 {
+                tile_object = Some(TileObjects::Tree)
+            }
+
             // Assign the noise altitude to the coord
             if let Some(x) = grid.get_mut(coord) {
-                *x = Tile::new(altitude);
+                *x = Tile::new(altitude, tile_object);
             }
         }
 
