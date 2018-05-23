@@ -86,8 +86,11 @@ impl Chunk {
 
             let mut tile_object = None;
             // Create vegetation
-            if coord.x == 0 && coord.y == 0 {
-                tile_object = Some(TileObjects::Tree)
+            if altitude > 3.0 && altitude < 8.0 {
+                // Create them randomly
+                if self.noises[2].get(coord) > 0.6 {
+                    tile_object = Some(TileObjects::Tree)
+                }
             }
 
             // Assign the noise altitude to the coord

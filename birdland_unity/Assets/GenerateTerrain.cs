@@ -6,7 +6,8 @@ using UnityEngine.Networking;
 [System.Serializable]
 class Tile
 {
-    public float alt = 3;
+    public float alt;
+    public string obj;
 
 }
 
@@ -26,6 +27,8 @@ class Chunk
 public class GenerateTerrain : MonoBehaviour
 {
     Mesh mesh;
+
+    public GameObject tree;
 
     public int coordX = 1;
     public int coordY = 1;
@@ -65,7 +68,8 @@ public class GenerateTerrain : MonoBehaviour
             int z = i % Chunk.SIZE;
             int x = i / Chunk.SIZE;
             float y = chunk.cells[i].alt;
-            vertices.Add(new Vector3(x, y, z));
+            Vector3 position = new Vector3(x, y, z);
+            vertices.Add(position);
 
             if (y < 2)
             {
@@ -82,6 +86,12 @@ public class GenerateTerrain : MonoBehaviour
             else
             {
                 colors.Add(new Color32(255, 255, 255, 255));
+            }
+
+            // Place a tree
+            if (chunk.cells[i].obj == "Tree")
+            {
+                Instantiate(tree, position, Quaternion.identity);
             }
         }
 

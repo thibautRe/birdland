@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4637a16bbb4e8d94e9585a3a4ec670e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coordX: 36
+  coordX: 40
   coordY: 15
 --- !u!4 &961530730
 Transform:
