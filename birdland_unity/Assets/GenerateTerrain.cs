@@ -45,7 +45,10 @@ public class GenerateTerrain : MonoBehaviour
 
     void OnValidate()
     {
-        StartCoroutine(GetChunk());
+        if (Application.isPlaying)
+        {
+            StartCoroutine(GetChunk());
+        }
     }
 
     void UpdateMesh()
