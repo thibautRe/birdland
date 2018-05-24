@@ -24,7 +24,7 @@ class Chunk
 }
 
 [RequireComponent(typeof(MeshFilter))]
-public class GenerateTerrain : MonoBehaviour
+public class ChunkGenerator : MonoBehaviour
 {
     Mesh mesh;
 
@@ -94,7 +94,7 @@ public class GenerateTerrain : MonoBehaviour
             // Place a tree
             if (chunk.cells[i].obj == "Tree")
             {
-                Instantiate(tree, position, Quaternion.identity);
+                Instantiate(tree, transform.position + position, Quaternion.identity, transform);
             }
         }
 
@@ -123,6 +123,8 @@ public class GenerateTerrain : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
         Chunk chunk = Chunk.FromJSON(www.downloadHandler.text);
+
+        Debug.Log(www.isNetworkError);
 
         GenerateMesh(chunk);
         UpdateMesh();

@@ -42,6 +42,7 @@ ExportedObj/
 *.blend1
 *.blend1.meta
 objects.meta
+*.cs.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
