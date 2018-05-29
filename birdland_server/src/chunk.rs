@@ -84,14 +84,7 @@ impl Chunk {
             altitude = (altitude * 10u32.pow(self.precision) as f64).round()
                 / 10u32.pow(self.precision) as f64;
 
-            let mut tile_object = None;
-            // Create vegetation
-            if altitude > 3.0 && altitude < 8.0 {
-                // Create them randomly
-                if self.noises[2].get(coord) > 0.6 {
-                    tile_object = Some(TileObjects::Tree)
-                }
-            }
+            let tile_object = self.get_tile_object(coord, altitude);
 
             // Assign the noise altitude to the coord
             if let Some(x) = grid.get_mut(coord) {
@@ -116,6 +109,21 @@ impl Chunk {
         let distance_from_center = factor * (-(point.x as f64 / center - 1.0).abs() + 1.0)
             * (-(point.y as f64 / center - 1.0).abs() + 1.0);
         easing_cub_in_out(distance_from_center as f64)
+    }
+
+    /// Returns the content of the tile.
+    fn get_tile_object(&self, point: Coord, altitude: f64) -> Option<TileObjects> {
+        // Create vegetation
+        if altitude > 3.0 && altitude < 8.0 {
+            // Create them randomly
+            if self.noises[2].get(point) > 0.6 {
+                Some(TileObjects::Tree)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 }
 
